@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Cairo-First Weather Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="page">
+    <h1>Weather Dashboard</h1>
+    <p class="subtitle">Defaults to Cairo — try any city.</p>
+
+    <form method="post" class="search-form">
+      <input type="text" name="city" value="{{ city_input }}" placeholder="City name" autofocus>
+      <button type="submit">Check weather</button>
+    </form>
+
+    {% if found %}
+      <p class="source-note">Source: {{ source }}</p>
+
+      <section class="current-card">
+        <h2>{{ data.city }}, {{ data.country }}</h2>
+        <p class="current-temp">{{ data.current.temp_c }}&deg;C</p>
+        <p class="current-desc">{{ weather_label(data.current.weather_code) }}</p>
+      </section>
+
+      <section class="forecast">
+        {% for day in forecast_days %}
+          <div class="forecast-card">
+            <p class="forecast-day">{{ day.label }}</p>
+            <p class="forecast-desc">{{ day.description }}</p>
+            <p class="forecast-temps">
+              <span class="temp-max">{{ day.temp_max_c }}&deg;</span>
+              <span class="temp-min">{{ day.temp_min_c }}&deg;</span>
+            </p>
+          </div>
+        {% endfor %}
+      </section>
+    {% else %}
+      <p class="not-found">Couldn't find weather for "{{ city_input }}" — try a different spelling
+        or a nearby major city.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
